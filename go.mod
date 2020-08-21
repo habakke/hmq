@@ -1,6 +1,6 @@
 module github.com/fhmq/hmq
 
-go 1.12
+go 1.14
 
 require (
 	github.com/Shopify/sarama v1.23.0

@@ -4,7 +4,7 @@ COPY . .
 RUN CGO_ENABLED=0 go build -o hmq -a -ldflags '-extldflags "-static"' .
 
 
-FROM alpine:3.8
+FROM scratch
 WORKDIR /
 COPY --from=builder /go/src/github.com/fhmq/hmq/hmq .
 EXPOSE 1883
