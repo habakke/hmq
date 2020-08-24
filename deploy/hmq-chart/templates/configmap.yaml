@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  hmq.config: |
+    {
+      "workerNum": 4096,
+      "port": "1883",
+      "host": "0.0.0.0",
+      "plugins": []
+    }

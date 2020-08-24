@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "hmq-chart.fullname" . }}
+  labels:
+    {{- include "hmq-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: TCP
+      name: {{ .Values.service.name }}
+  selector:
+    {{- include "hmq-chart.selectorLabels" . | nindent 4 }}
