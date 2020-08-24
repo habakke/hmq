@@ -1,0 +1,12 @@
+replicaCount: 1
+
+image:
+  repository: habakke/hmq
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+service:
+  type: LoadBalancer
+  port: 1883
+  name: mqtt
