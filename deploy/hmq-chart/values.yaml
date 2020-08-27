@@ -8,5 +8,7 @@ image:
 
 service:
   type: LoadBalancer
-  port: 1883
+  port:
+    mqtt: 1883
+    http: 8080
   name: mqtt

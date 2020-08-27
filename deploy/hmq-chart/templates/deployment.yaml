@@ -20,7 +20,8 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: {{ .Values.service.name }}
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.service.port.mqtt }}
+              containerPort: {{ .Values.service.port.http }}
               protocol: TCP
           volumeMounts:
             - name: {{ .Release.Name }}-configmap
