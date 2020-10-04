@@ -2,5 +2,8 @@ hmq
 log
 log/*
 *.test
+<<<<<<< HEAD
 .vscode/settings.json
+=======
+>>>>>>> f6148ffe4d1d85d9b9f149f10670bd6be43eabd6
 **/.DS_store
