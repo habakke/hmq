@@ -1,4 +1,4 @@
-Free and High Performance MQTT Broker 
+Free and High Performance MQTT Broker
 ============
 
 ## About
@@ -107,7 +107,7 @@ Common Options:
  	$ cd $GOPATH/github.com/fhmq/router
  	$ go run main.go
  2, config router in hmq.config  ("router": "127.0.0.1:9888")
- 
+
 ```
 Other Version Of Cluster Based On gRPC: [click here](https://github.com/fhmq/rhmq)
 
@@ -127,6 +127,20 @@ Other Version Of Cluster Based On gRPC: [click here](https://github.com/fhmq/rhm
 
 * Low memory and CPU
 
+
+## Deploying to Kubernetes using Helm charts
+
+Installing hmq using the helm chart in deploy folder
+
+```bash
+helm install <name> hmq-chart
+```
+
+## Uninstalling Helm chart
+
+```bash
+helm uninstall <name>
+```
 
 ## License
 
