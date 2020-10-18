@@ -7,7 +7,6 @@ RUN apk update && apk upgrade && \
     apk add --no-cache make
 
 ADD / .
-
 WORKDIR /
 RUN make build
 
