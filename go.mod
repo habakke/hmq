@@ -14,7 +14,7 @@ require (
 	github.com/prometheus/client_model v0.2.0
 	github.com/prometheus/common v0.14.0
 	github.com/segmentio/fasthash v0.0.0-20180216231524-a72b379d632e
-	github.com/stretchr/testify v1.4.0
+	github.com/stretchr/testify v1.6.1
 	github.com/tidwall/gjson v1.3.0
 	go.uber.org/zap v1.13.0
 	golang.org/x/net v0.0.0-20200625001655-4c5254603344
