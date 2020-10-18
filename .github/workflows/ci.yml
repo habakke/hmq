@@ -21,7 +21,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and test Go app
+      - name: Run tests
         uses: cedrickring/golang-action@1.6.0
         with:
           args: make test

@@ -12,6 +12,7 @@ build-all: clean build
 build:
 		mkdir -p $(BUILD_DIR)
 		CGO_ENABLED=0 go build -o $(BUILD_DIR)/$(BINARY) -a -ldflags '-extldflags "-static"' .
+
 test:
 	go test ./...
 

@@ -2,6 +2,10 @@ FROM --platform=$BUILDPLATFORM golang:alpine AS build
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 
+# Install Dependencies
+RUN apk update && apk upgrade && \
+    apk add --no-cache cmake
+
 WORKDIR /
 RUN make build
 
