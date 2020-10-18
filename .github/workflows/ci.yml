@@ -32,4 +32,5 @@ jobs:
           push: true
           tags: |
             habakke/hmq:latest
-            habakke/hmq:2.0.${{ GITHUB_RUN_NUMBER }}
+            habakke/hmq:${{ env.GITHUB_SHA }}
+            habakke/hmq:2.0.${{ env.GITHUB_RUN_NUMBER }}
