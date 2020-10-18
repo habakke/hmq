@@ -1,8 +1,12 @@
-ARG ARCH=
-FROM --platform=${ARCH} busybox:musl
+FROM --platform=$BUILDPLATFORM golang:alpine AS build
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
 
 WORKDIR /
-COPY /build/hmq .
+RUN make build
+
+FROM busybox:musl
+COPY --from=build /build/hmq .
 EXPOSE 1883
 
 CMD ["/hmq"]

@@ -14,8 +14,8 @@ jobs:
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      - name: Available platforms
-        run: echo ${{ steps.buildx.outputs.platforms }}
+        with:
+          buildkitd-flags: --debug
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -24,7 +24,7 @@ jobs:
       - name: Build and test Go app
         uses: cedrickring/golang-action@1.6.0
         with:
-          args: make test && make build
+          args: make test
       - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
