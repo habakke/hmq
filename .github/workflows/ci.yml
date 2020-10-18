@@ -21,10 +21,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Run tests
-        uses: cedrickring/golang-action@1.6.0
-        with:
-          args: make test
+#      - name: Run tests
+#        uses: cedrickring/golang-action@1.6.0
+#        with:
+#          args: make test
       - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
