@@ -6,8 +6,7 @@ ARG BUILDPLATFORM
 RUN apk add --no-cache make git
 
 WORKDIR /src
-COPY * .
-COPY .git/ ./.git/
+COPY / .
 RUN make build
 
 FROM busybox:musl
