@@ -6,9 +6,10 @@ ARG BUILDPLATFORM
 RUN apk update && apk upgrade && \
     apk add --no-cache make
 
-ADD ./ .
-WORKDIR /
+ADD ./ build
+WORKDIR /build
 RUN echo $(ls -la)
+RUN echo $(ls -la /build)
 RUN make build
 
 FROM busybox:musl
