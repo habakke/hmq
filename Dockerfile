@@ -8,7 +8,7 @@ RUN apk update && apk upgrade && \
 
 ADD / .
 WORKDIR /
-RUN echo ${ls -la}
+RUN echo $(ls -la)
 RUN make build
 
 FROM busybox:musl
