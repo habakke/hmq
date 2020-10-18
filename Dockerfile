@@ -4,7 +4,7 @@ ARG BUILDPLATFORM
 
 # Install Dependencies
 RUN apk update && apk upgrade && \
-    apk add --no-cache cmake
+    apk add --no-cache make
 
 WORKDIR /
 RUN make build
