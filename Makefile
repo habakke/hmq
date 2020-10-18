@@ -2,7 +2,6 @@ REPO=habakke
 CMD=hmq
 BINARY=hmq
 IMAGE=hmq
-VERSION=latest
 ROOT_DIR := $(if $(ROOT_DIR),$(ROOT_DIR),$(shell git rev-parse --show-toplevel))
 BUILD_DIR = $(ROOT_DIR)/build
 all: build

@@ -2,7 +2,7 @@ package broker
 
 import (
 	"fmt"
-	"github.com/fhmq/hmq/metrics"
+	"github.com/habakke/hmq/metrics"
 	"github.com/prometheus/common/expfmt"
 	"net/http"
 	"os"

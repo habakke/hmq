@@ -7,8 +7,8 @@ for [eclipse paho client](https://github.com/eclipse?utf8=%E2%9C%93&q=mqtt&type=
 
 ## RUNNING
 ```bash
-$ go get github.com/fhmq/hmq
-$ cd $GOPATH/github.com/fhmq/hmq
+$ go get github.com/habakke/hmq
+$ cd $GOPATH/github.com/habakke/hmq
 $ go run main.go
 ```
 
