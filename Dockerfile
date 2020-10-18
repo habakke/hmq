@@ -3,7 +3,7 @@ ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 
 # Install Dependencies
-RUN apk add --no-cache make
+RUN apk add --no-cache make git
 
 WORKDIR /src
 COPY * .
