@@ -30,6 +30,12 @@ build-arm64:
 		docker build -t $(REPO)/$(IMAGE):arm64-$(VERSION) --build-arg ARCH=linux/arm64/v8 --pull .
 		docker push $(REPO)/$(IMAGE):arm64-$(VERSION)
 
+build:
+		mkdir -p $(BUILD_DIR)
+		CGO_ENABLED=0 go build -o $(BUILD_DIR)/$(BINARY) -a -ldflags '-extldflags "-static"' .
+test:
+	go test ./...
+
 start:
 	go run $(ROOT_DIR)/main.go
 
