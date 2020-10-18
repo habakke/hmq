@@ -21,7 +21,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and test Go app
         uses: cedrickring/golang-action@1.6.0
-      - name: Build and push
+        with:
+          args: make test && make build
+      - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -30,4 +32,4 @@ jobs:
           push: true
           tags: |
             habakke/hmq:latest
-            habakke/hmq:2.0.$GITHUB_RUN_NUMBER
+            habakke/hmq:2.0.${GITHUB_RUN_NUMBER}
