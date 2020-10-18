@@ -1,12 +1,19 @@
 package broker
 
 import (
+	"github.com/fhmq/hmq/metrics"
 	"github.com/gin-gonic/gin"
 )
 
-func InitHTTPMoniter(b *Broker) {
+func InitHTTP(b *Broker) {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+
+	b.metrics = &metrics.Manager{}
+	b.metrics.Init(router)
+	_ = b.metrics.Add(metrics.MetricNumberOfMessages, "Total number of packets received")
+	_ = b.metrics.Add(metrics.MetricNumberOfClients, "Total number of clients connected")
+
 	router.DELETE("api/v1/connections/:clientid", func(c *gin.Context) {
 		clientid := c.Param("clientid")
 		cli, ok := b.clients.Load(clientid)
@@ -22,5 +29,6 @@ func InitHTTPMoniter(b *Broker) {
 		c.JSON(200, &resp)
 	})
 
+_:
 	router.Run(":" + b.config.HTTPPort)
 }

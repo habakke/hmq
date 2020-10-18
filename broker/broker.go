@@ -3,6 +3,7 @@ package broker
 import (
 	"crypto/tls"
 	"fmt"
+	"github.com/fhmq/hmq/metrics"
 	"net"
 	"net/http"
 	"sync"
@@ -33,6 +34,7 @@ type Message struct {
 
 type Broker struct {
 	id          string
+	started     bool
 	mu          sync.Mutex
 	config      *Config
 	tlsConfig   *tls.Config
@@ -46,6 +48,7 @@ type Broker struct {
 	sessionMgr  *sessions.Manager
 	auth        auth.Auth
 	bridgeMQ    bridge.BridgeMQ
+	metrics     *metrics.Manager
 }
 
 func newMessagePool() []chan *Message {
@@ -64,6 +67,7 @@ func NewBroker(config *Config) (*Broker, error) {
 
 	b := &Broker{
 		id:          GenUniqueId(),
+		started:     false,
 		config:      config,
 		wpool:       pool.New(config.Worker),
 		nodes:       make(map[string]interface{}),
@@ -103,6 +107,8 @@ func (b *Broker) SubmitWork(clientId string, msg *Message) {
 		b.wpool = pool.New(b.config.Worker)
 	}
 
+	_ = b.metrics.Inc(metrics.MetricNumberOfMessages)
+
 	if msg.client.typ == CLUSTER {
 		b.clusterPool <- msg
 	} else {
@@ -120,7 +126,7 @@ func (b *Broker) Start() {
 	}
 
 	if b.config.HTTPPort != "" {
-		go InitHTTPMoniter(b)
+		go InitHTTP(b)
 	}
 
 	//listen client over tcp
@@ -149,6 +155,7 @@ func (b *Broker) Start() {
 		b.ConnectToDiscovery()
 	}
 
+	b.started = true
 }
 
 func (b *Broker) StartWebsocketListening() {
@@ -368,7 +375,9 @@ func (b *Broker) handleConnection(typ int, conn net.Conn) {
 		b.routes.Store(cid, c)
 	}
 
+	_ = b.metrics.Inc(metrics.MetricNumberOfClients)
 	c.readLoop()
+	_ = b.metrics.Dec(metrics.MetricNumberOfClients)
 }
 
 func (b *Broker) ConnectToDiscovery() {

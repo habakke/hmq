@@ -13,23 +13,22 @@ build-amd64:
 		mkdir -p $(BUILD_DIR)
 		GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o $(BUILD_DIR)/$(BINARY) -a -ldflags '-extldflags "-static"' .
 		docker rmi busybox:musl
-		docker build -t $(REPO)/$(IMAGE):amd64-$(VERSION) --build-arg ARCH=linux/amd64 .
+		docker build -t $(REPO)/$(IMAGE):amd64-$(VERSION) --build-arg ARCH=linux/amd64 --pull .
 		docker push $(REPO)/$(IMAGE):amd64-$(VERSION)
 
 build-arm:
 		mkdir -p $(BUILD_DIR)
 		GOOS=linux GOARCH=arm CGO_ENABLED=0 go build -o $(BUILD_DIR)/$(BINARY) -a -ldflags '-extldflags "-static"' .
 		docker rmi busybox:musl
-		docker build -t $(REPO)/$(IMAGE):arm-$(VERSION) --build-arg ARCH=linux/arm .
+		docker build -t $(REPO)/$(IMAGE):arm-$(VERSION) --build-arg ARCH=linux/arm --pull .
 		docker push $(REPO)/$(IMAGE):arm-$(VERSION)
 
 build-arm64:
 		mkdir -p $(BUILD_DIR)
 		GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o $(BUILD_DIR)/$(BINARY) -a -ldflags '-extldflags "-static"' .
 		docker rmi busybox:musl
-		docker build -t $(REPO)/$(IMAGE):arm64-$(VERSION) --build-arg ARCH=linux/arm64/v8 .
+		docker build -t $(REPO)/$(IMAGE):arm64-$(VERSION) --build-arg ARCH=linux/arm64/v8 --pull .
 		docker push $(REPO)/$(IMAGE):arm64-$(VERSION)
-
 
 start:
 	go run $(ROOT_DIR)/main.go
