@@ -3,11 +3,10 @@ ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 
 # Install Dependencies
-RUN apk update && \
-    apk add --no-cache make
+RUN apk add --no-cache make
 
-COPY . .
-WORKDIR /
+WORKDIR /src
+COPY * .
 RUN echo $(ls -la)
 RUN make build
 
