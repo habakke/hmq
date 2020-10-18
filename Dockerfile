@@ -7,7 +7,7 @@ RUN apk add --no-cache make git
 
 WORKDIR /src
 COPY * .
-RUN echo $(ls -la)
+COPY .git/ ./.git/
 RUN make build
 
 FROM busybox:musl
