@@ -6,7 +6,7 @@ ARG BUILDPLATFORM
 RUN apk update && apk upgrade && \
     apk add --no-cache make
 
-ADD / .
+ADD ./ .
 WORKDIR /
 RUN echo $(ls -la)
 RUN make build
