@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          target: unit-test
+          target: unit-test-coverage
           file: ./Dockerfile
           push: false
       - name: Build and push Docker images
