@@ -1,15 +1,25 @@
-name: ci
+name: Continuous Integration
 
 on:
   push:
-    branches: master
+    branches: [master]
 
 jobs:
-  multi:
+  ci:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DOCKER_BUILDKIT: "1"
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -21,14 +31,18 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-#      - name: Run tests
-#        uses: cedrickring/golang-action@1.6.0
-#        with:
-#          args: make test
+      - name: Run unit-tests and code coverage
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          target: unit-test-coverage
+          file: ./Dockerfile
+          push: false
       - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
           context: .
+          target: build
           file: ./Dockerfile
           platforms: |
             linux/386
@@ -39,7 +53,5 @@ jobs:
           push: true
           tags: |
             habakke/hmq:latest
-#            habakke/hmq:${{ env.GITHUB_SHA }}
-#            habakke/hmq:2.0.${{ env.GITHUB_RUN_NUMBER }}
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+            habakke/hmq:${{ github.sha }}
+            habakke/hmq:2.0.${{ github.run_number }}

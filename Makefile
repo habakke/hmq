@@ -4,18 +4,31 @@ BINARY=hmq
 IMAGE=hmq
 ROOT_DIR := $(if $(ROOT_DIR),$(ROOT_DIR),$(shell git rev-parse --show-toplevel))
 BUILD_DIR = $(ROOT_DIR)/build
-all: build
 
-build-all: clean build
+prepare:
+	mkdir -p $(BUILD_DIR)
 
-build:
-		mkdir -p $(BUILD_DIR)
-		CGO_ENABLED=0 go build -o $(BUILD_DIR)/$(BINARY) -a -ldflags '-extldflags "-static"' .
+lint: export DOCKER_BUILDKIT=1
+lint:
+	@docker build . --target lint
 
-test:
-	go test ./...
+test: export DOCKER_BUILDKIT=1
+test: prepare
+	@docker build . --target unit-test
 
-start:
+build: export DOCKER_BUILDKIT=1
+build: prepare
+	@docker build . --target bin --output $(BUILD_DIR)
+
+test-local: export CGO_ENABLED=0
+test-local: prepare
+	 go test -v -coverprofile=$(BUILD_DIR)/cover.out ./...
+
+build-local: export CGO_ENABLED=0
+build-local: prepare
+	go build -o $(BUILD_DIR)/$(BINARY) -a -ldflags '-extldflags "-static"' .
+
+start-local: build-local
 	go run $(ROOT_DIR)/main.go
 
 clean:

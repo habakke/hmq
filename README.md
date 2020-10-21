@@ -7,9 +7,7 @@ for [eclipse paho client](https://github.com/eclipse?utf8=%E2%9C%93&q=mqtt&type=
 
 ## RUNNING
 ```bash
-$ go get github.com/habakke/hmq
-$ cd $GOPATH/github.com/habakke/hmq
-$ go run main.go
+$ make start
 ```
 
 ## Usage of hmq:
@@ -102,14 +100,11 @@ Common Options:
 
 ### Cluster
 ```bash
- 1, start router for hmq  (https://github.com/fhmq/router.git)
- 	$ go get github.com/fhmq/router
- 	$ cd $GOPATH/github.com/fhmq/router
- 	$ go run main.go
+ 1, start router for hmq  (https://github.com/habakke/router.git)
+ 	$ make start-local
  2, config router in hmq.config  ("router": "127.0.0.1:9888")
 
 ```
-Other Version Of Cluster Based On gRPC: [click here](https://github.com/fhmq/rhmq)
 
 ### Online/Offline Notification
 ```bash
@@ -118,15 +113,6 @@ Other Version Of Cluster Based On gRPC: [click here](https://github.com/fhmq/rhm
  payload:
 	{"clientID":"client001","online":true/false,"timestamp":"2018-10-25T09:32:32Z"}
 ```
-
-## Performance
-
-* High throughput
-
-* High concurrency
-
-* Low memory and CPU
-
 
 ## Deploying to Kubernetes using Helm charts
 
