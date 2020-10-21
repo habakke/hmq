@@ -101,7 +101,7 @@ Common Options:
 ### Cluster
 ```bash
  1, start router for hmq  (https://github.com/habakke/router.git)
- 	$ make start
+ 	$ make start-local
  2, config router in hmq.config  ("router": "127.0.0.1:9888")
 
 ```
