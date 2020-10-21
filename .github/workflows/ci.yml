@@ -1,11 +1,11 @@
-name: ci
+name: Continuous Integration
 
 on:
   push:
     branches: [master, dev]
 
 jobs:
-  multi:
+  ci:
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: "1"
