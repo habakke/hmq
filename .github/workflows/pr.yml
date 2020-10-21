@@ -3,10 +3,12 @@ name: Pull Request
 on:
   pull_request:
     branches: [master]
+    types: [opened]
 
 jobs:
   pr:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       DOCKER_BUILDKIT: "1"
     steps:
