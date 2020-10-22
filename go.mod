@@ -15,8 +15,7 @@ require (
 	github.com/prometheus/common v0.14.0
 	github.com/segmentio/fasthash v0.0.0-20180216231524-a72b379d632e
 	github.com/stretchr/testify v1.6.1
-	github.com/tidwall/gjson v1.3.0
+	github.com/tidwall/gjson v1.6.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20200904194848-62affa334b73
-	gopkg.in/jcmturner/goidentity.v3 v3.0.0 // indirect
 )
