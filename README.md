@@ -119,7 +119,8 @@ Common Options:
 Installing hmq using the helm chart in deploy folder
 
 ```bash
-helm install <name> hmq-chart
+$ helm repo add habakke https://habakke.github.io/charts/
+$ helm install <name> habakke/hmq
 ```
 
 ## Uninstalling Helm chart

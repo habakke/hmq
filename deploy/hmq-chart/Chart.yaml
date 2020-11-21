@@ -1,6 +1,0 @@
-apiVersion: v2
-name: hmq-chart
-description: High Performance MQTT Broker
-type: application
-version: 1.0.0
-appVersion: 2.0.0
