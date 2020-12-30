@@ -34,4 +34,5 @@ COPY --from=unit-test /src/build/cover.out /cover.out
 FROM busybox:musl AS bin
 COPY --from=build /src/build/hmq .
 EXPOSE 1883
+EXPOSE 8080
 CMD ["/hmq"]
