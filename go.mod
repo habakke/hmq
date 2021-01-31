@@ -7,6 +7,7 @@ require (
 	github.com/Shopify/sarama v1.27.1
 	github.com/bitly/go-simplejson v0.5.0
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
+	github.com/eapache/queue v1.1.0
 	github.com/eclipse/paho.mqtt.golang v1.2.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/google/uuid v1.1.2
@@ -15,8 +16,7 @@ require (
 	github.com/prometheus/common v0.14.0
 	github.com/segmentio/fasthash v0.0.0-20180216231524-a72b379d632e
 	github.com/stretchr/testify v1.6.1
-	github.com/tidwall/gjson v1.3.0
+	github.com/tidwall/gjson v1.6.8
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20200904194848-62affa334b73
-	gopkg.in/jcmturner/goidentity.v3 v3.0.0 // indirect
 )
