@@ -152,8 +152,92 @@ func publish(sub *subscription, packet *packets.PublishPacket) {
 	// 	log.Error("process message for psub error,  ", zap.Error(err))
 	// }
 
-	err := sub.client.WriterPacket(packet)
-	if err != nil {
-		log.Error("process message for psub error,  ", zap.Error(err))
+	switch packet.Qos {
+	case QosAtMostOnce:
+		err := sub.client.WriterPacket(packet)
+		if err != nil {
+			log.Error("process message for psub error,  ", zap.Error(err))
+		}
+	case QosAtLeastOnce, QosExactlyOnce:
+		sub.client.inflightMu.Lock()
+		sub.client.inflight[packet.MessageID] = &inflightElem{status: Publish, packet: packet, timestamp: time.Now().Unix()}
+		sub.client.inflightMu.Unlock()
+		err := sub.client.WriterPacket(packet)
+		if err != nil {
+			log.Error("process message for psub error,  ", zap.Error(err))
+		}
+		sub.client.ensureRetryTimer()
+	default:
+		log.Error("publish with unknown qos", zap.String("ClientID", sub.client.info.clientID))
+		return
 	}
+}
+
+// timer for retry delivery
+func (c *client) ensureRetryTimer(interval ...int64) {
+	if c.retryTimer != nil {
+		return
+	}
+	if len(interval) > 1 {
+		return
+	}
+	timerInterval := retryInterval
+	if len(interval) == 1 {
+		timerInterval = interval[0]
+	}
+	c.retryTimerLock.Lock()
+	c.retryTimer = time.AfterFunc(time.Duration(timerInterval)*time.Second, c.retryDelivery)
+	c.retryTimerLock.Unlock()
+	return
+}
+
+func (c *client) resetRetryTimer() {
+	if c.retryTimer == nil {
+		return
+	}
+	// reset timer
+	c.retryTimerLock.Lock()
+	c.retryTimer = nil
+	c.retryTimerLock.Unlock()
+
+}
+
+func (c *client) retryDelivery() {
+	c.resetRetryTimer()
+	c.inflightMu.RLock()
+	ilen := len(c.inflight)
+	if c.conn == nil || ilen == 0 { //Reset timer when client offline OR inflight is empty
+		c.inflightMu.RUnlock()
+		return
+	}
+
+	// copy the to be retried elements out of the map to only hold the lock for a short time and use the new slice later to iterate
+	// through them
+	toRetryEle := make([]*inflightElem, 0, ilen)
+	for _, infEle := range c.inflight {
+		toRetryEle = append(toRetryEle, infEle)
+	}
+	c.inflightMu.RUnlock()
+	now := time.Now().Unix()
+
+	for _, infEle := range toRetryEle {
+		age := now - infEle.timestamp
+		if age >= retryInterval {
+			if infEle.status == Publish {
+				c.WriterPacket(infEle.packet)
+				infEle.timestamp = now
+			} else if infEle.status == Pubrel {
+				pubrel := packets.NewControlPacket(packets.Pubrel).(*packets.PubrelPacket)
+				pubrel.MessageID = infEle.packet.MessageID
+				c.WriterPacket(pubrel)
+				infEle.timestamp = now
+			}
+		} else {
+			if age < 0 {
+				age = 0
+			}
+			c.ensureRetryTimer(retryInterval - age)
+		}
+	}
+	c.ensureRetryTimer()
 }
