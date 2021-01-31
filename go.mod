@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/Depado/ginprom v1.5.0
-	github.com/Shopify/sarama v1.27.1
+	github.com/Shopify/sarama v1.27.2
 	github.com/bitly/go-simplejson v0.5.0
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/eapache/queue v1.1.0
