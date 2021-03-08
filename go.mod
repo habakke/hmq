@@ -1,6 +1,6 @@
 module github.com/habakke/hmq
 
-go 1.15
+go 1.16
 
 require (
 	github.com/Depado/ginprom v1.5.0
