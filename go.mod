@@ -3,7 +3,7 @@ module github.com/habakke/hmq
 go 1.16
 
 require (
-	github.com/Depado/ginprom v1.5.0
+	github.com/Depado/ginprom v1.6.0
 	github.com/Shopify/sarama v1.28.0
 	github.com/bitly/go-simplejson v0.5.0
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
