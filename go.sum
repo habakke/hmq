@@ -2,8 +2,8 @@ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Depado/ginprom v1.6.0 h1:+FPcZ6ztv1FlqMQ+RUUDST531O8srm7sOJ0acA3MPTc=
-github.com/Depado/ginprom v1.6.0/go.mod h1:cMlQwg/daHJdgGlaDHBlzse+7CZxkVgcqZqvDcIKg6c=
+github.com/Depado/ginprom v1.7.0 h1:Jw+qytNg4fwjzpUIajzjEK9dVlG2Ov9/ve/q26e/hFI=
+github.com/Depado/ginprom v1.7.0/go.mod h1:cMlQwg/daHJdgGlaDHBlzse+7CZxkVgcqZqvDcIKg6c=
 github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible/go.mod h1:r7JcOSlj0wfOMncg0iLm8Leh48TZaKVeNIfJntJ2wa0=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/sarama v1.28.0 h1:lOi3SfE6OcFlW9Trgtked2aHNZ2BIG/d6Do+PEUAqqM=
