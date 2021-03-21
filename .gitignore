@@ -3,6 +3,7 @@ log
 log/*
 *.test
 .vscode/settings.json
+.pre-commit-config.yaml
 **/.DS_store
 .idea
 build/
