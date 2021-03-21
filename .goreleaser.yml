@@ -29,7 +29,7 @@ dockers:
     ids: [hmq]
     goos: linux
     goarch: amd64
-    buildx: true
+    use_buildx: true
     dockerfile: Dockerfile.goreleaser
     build_flag_templates:
       - --pull
@@ -47,7 +47,7 @@ dockers:
     ids: [hmq]
     goos: linux
     goarch: 386
-    buildx: true
+    use_buildx: true
     dockerfile: Dockerfile.goreleaser
     build_flag_templates:
       - --pull
@@ -65,7 +65,7 @@ dockers:
     ids: [hmq]
     goos: linux
     goarch: arm64
-    buildx: true
+    use_buildx: true
     dockerfile: Dockerfile.goreleaser
     build_flag_templates:
       - --pull
@@ -84,7 +84,7 @@ dockers:
     goos: linux
     goarch: arm
     goarm: 6
-    buildx: true
+    use_buildx: true
     dockerfile: Dockerfile.goreleaser
     build_flag_templates:
       - --pull
@@ -103,7 +103,7 @@ dockers:
     goos: linux
     goarch: arm
     goarm: 7
-    buildx: true
+    use_buildx: true
     dockerfile: Dockerfile.goreleaser
     build_flag_templates:
       - --pull
