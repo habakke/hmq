@@ -1,0 +1,5 @@
+FROM busybox:musl AS bin
+COPY hmq /hmq
+EXPOSE 1883
+EXPOSE 8080
+CMD ["/hmq"]
