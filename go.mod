@@ -10,7 +10,7 @@ require (
 	github.com/eapache/queue v1.1.0
 	github.com/eclipse/paho.mqtt.golang v1.2.0
 	github.com/gin-gonic/gin v1.6.3
-	github.com/google/uuid v1.1.1
+	github.com/google/uuid v1.2.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_model v0.2.0
 	github.com/prometheus/common v0.19.0
