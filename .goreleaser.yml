@@ -4,7 +4,7 @@ before:
     - go mod tidy
 builds:
   - main: main.go
-    id: "hmq"
+    id: hmq
     binary: hmq
     goos:
       - linux
@@ -21,11 +21,21 @@ builds:
     mod_timestamp: '{{ .CommitTimestamp }}'
     ldflags:
       - '-extldflags "-static" -X main.version={{ .Version }} -X main.commit={{ .Branch }}@{{ .ShortCommit }} -X main.buildTime={{ .Date }} -X main.builtBy=CI'
+docker_manifests:
+  - name_template: "ghcr.io/habakke/{{ .ProjectName }}:{{ .Version }}"
+    image_templates:
+      - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Version }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+  - name_template: "ghcr.io/habakke/{{ .ProjectName }}:{{ .Env.GITHUB_SHA }}"
+    image_templates:
+      - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Env.GITHUB_SHA }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+  - name_template: "ghcr.io/habakke/{{ .ProjectName }}:latest"
+    image_templates:
+      - "ghcr.io/habakke/{{ .ProjectName }}:latest-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
 dockers:
   - image_templates:
-    - "ghcr.io/habakke/hmq:{{ .Version }}"
-    - "ghcr.io/habakke/hmq:{{ .Env.GITHUB_SHA }}"
-    - "ghcr.io/habakke/hmq:latest"
+    - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Version }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+    - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Env.GITHUB_SHA }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+    - "ghcr.io/habakke/{{ .ProjectName }}:latest-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
     ids: [hmq]
     goos: linux
     goarch: amd64
@@ -36,14 +46,14 @@ dockers:
       - --platform=linux/amd64
       - --label=org.opencontainers.image.title={{ .ProjectName }}
       - --label=org.opencontainers.image.description=High performance mqtt server
-      - --label=org.opencontainers.image.source=https://github.com/habakke/hmq
+      - --label=org.opencontainers.image.source=https://github.com/habakke/{{ .ProjectName }}
       - --label=org.opencontainers.image.version={{ .Version }}
       - --label=org.opencontainers.image.created={{ .Date }}
       - --label=org.opencontainers.image.revision={{ .FullCommit }}
   - image_templates:
-      - "ghcr.io/habakke/hmq:{{ .Version }}"
-      - "ghcr.io/habakke/hmq:{{ .Env.GITHUB_SHA }}"
-      - "ghcr.io/habakke/hmq:latest"
+      - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Version }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+      - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Env.GITHUB_SHA }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+      - "ghcr.io/habakke/{{ .ProjectName }}:latest-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
     ids: [hmq]
     goos: linux
     goarch: 386
@@ -54,14 +64,14 @@ dockers:
       - --platform=linux/386
       - --label=org.opencontainers.image.title={{ .ProjectName }}
       - --label=org.opencontainers.image.description=High performance mqtt server
-      - --label=org.opencontainers.image.source=https://github.com/habakke/hmq
+      - --label=org.opencontainers.image.source=https://github.com/habakke/{{ .ProjectName }}
       - --label=org.opencontainers.image.version={{ .Version }}
       - --label=org.opencontainers.image.created={{ .Date }}
       - --label=org.opencontainers.image.revision={{ .FullCommit }}
   - image_templates:
-      - "ghcr.io/habakke/hmq:{{ .Version }}"
-      - "ghcr.io/habakke/hmq:{{ .Env.GITHUB_SHA }}"
-      - "ghcr.io/habakke/hmq:latest"
+      - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Version }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+      - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Env.GITHUB_SHA }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+      - "ghcr.io/habakke/{{ .ProjectName }}:latest-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
     ids: [hmq]
     goos: linux
     goarch: arm64
@@ -72,14 +82,14 @@ dockers:
       - --platform=linux/arm64
       - --label=org.opencontainers.image.title={{ .ProjectName }}
       - --label=org.opencontainers.image.description=High performance mqtt server
-      - --label=org.opencontainers.image.source=https://github.com/habakke/hmq
+      - --label=org.opencontainers.image.source=https://github.com/habakke/{{ .ProjectName }}
       - --label=org.opencontainers.image.version={{ .Version }}
       - --label=org.opencontainers.image.created={{ .Date }}
       - --label=org.opencontainers.image.revision={{ .FullCommit }}
   - image_templates:
-      - "ghcr.io/habakke/hmq:{{ .Version }}"
-      - "ghcr.io/habakke/hmq:{{ .Env.GITHUB_SHA }}"
-      - "ghcr.io/habakke/hmq:latest"
+      - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Version }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+      - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Env.GITHUB_SHA }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+      - "ghcr.io/habakke/{{ .ProjectName }}:latest-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
     ids: [hmq]
     goos: linux
     goarch: arm
@@ -91,14 +101,14 @@ dockers:
       - --platform=linux/arm/v6
       - --label=org.opencontainers.image.title={{ .ProjectName }}
       - --label=org.opencontainers.image.description=High performance mqtt server
-      - --label=org.opencontainers.image.source=https://github.com/habakke/hmq
+      - --label=org.opencontainers.image.source=https://github.com/habakke/{{ .ProjectName }}
       - --label=org.opencontainers.image.version={{ .Version }}
       - --label=org.opencontainers.image.created={{ .Date }}
       - --label=org.opencontainers.image.revision={{ .FullCommit }}
   - image_templates:
-      - "ghcr.io/habakke/hmq:{{ .Version }}"
-      - "ghcr.io/habakke/hmq:{{ .Env.GITHUB_SHA }}"
-      - "ghcr.io/habakke/hmq:latest"
+      - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Version }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+      - "ghcr.io/habakke/{{ .ProjectName }}:{{ .Env.GITHUB_SHA }}-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
+      - "ghcr.io/habakke/{{ .ProjectName }}:latest-{{ .Arch }}{{if .Arm}}v{{.Arm}}{{end}}"
     ids: [hmq]
     goos: linux
     goarch: arm
@@ -110,7 +120,7 @@ dockers:
       - --platform=linux/arm/v7
       - --label=org.opencontainers.image.title={{ .ProjectName }}
       - --label=org.opencontainers.image.description=High performance mqtt server
-      - --label=org.opencontainers.image.source=https://github.com/habakke/hmq
+      - --label=org.opencontainers.image.source=https://github.com/habakke/{{ .ProjectName }}
       - --label=org.opencontainers.image.version={{ .Version }}
       - --label=org.opencontainers.image.created={{ .Date }}
       - --label=org.opencontainers.image.revision={{ .FullCommit }}
