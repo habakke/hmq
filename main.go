@@ -9,8 +9,15 @@ import (
 	"github.com/habakke/hmq/broker"
 )
 
-func main() {
+func init() {
+	ConfigureMaxProcs()
+}
+
+func ConfigureMaxProcs() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
+}
+
+func main() {
 	config, err := broker.ConfigureConfig(os.Args[1:])
 	if err != nil {
 		log.Fatal("configure broker config error: ", err)
