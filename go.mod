@@ -13,7 +13,7 @@ require (
 	github.com/google/uuid v1.2.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_model v0.2.0
-	github.com/prometheus/common v0.20.0
+	github.com/prometheus/common v0.21.0
 	github.com/segmentio/fasthash v0.0.0-20180216231524-a72b379d632e
 	github.com/stretchr/testify v1.7.0
 	github.com/tidwall/gjson v1.7.4
