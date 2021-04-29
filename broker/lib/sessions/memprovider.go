@@ -22,19 +22,19 @@ func NewMemProvider() *memProvider {
 	}
 }
 
-func (this *memProvider) New(id string) (*Session, error) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (p *memProvider) New(id string) (*Session, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 
-	this.st[id] = &Session{id: id}
-	return this.st[id], nil
+	p.st[id] = &Session{id: id}
+	return p.st[id], nil
 }
 
-func (this *memProvider) Get(id string) (*Session, error) {
-	this.mu.RLock()
-	defer this.mu.RUnlock()
+func (p *memProvider) Get(id string) (*Session, error) {
+	p.mu.RLock()
+	defer p.mu.RUnlock()
 
-	sess, ok := this.st[id]
+	sess, ok := p.st[id]
 	if !ok {
 		return nil, fmt.Errorf("store/Get: No session found for key %s", id)
 	}
@@ -42,21 +42,21 @@ func (this *memProvider) Get(id string) (*Session, error) {
 	return sess, nil
 }
 
-func (this *memProvider) Del(id string) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
-	delete(this.st, id)
+func (p *memProvider) Del(id string) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	delete(p.st, id)
 }
 
-func (this *memProvider) Save(id string) error {
+func (p *memProvider) Save(id string) error {
 	return nil
 }
 
-func (this *memProvider) Count() int {
-	return len(this.st)
+func (p *memProvider) Count() int {
+	return len(p.st)
 }
 
-func (this *memProvider) Close() error {
-	this.st = make(map[string]*Session)
+func (p *memProvider) Close() error {
+	p.st = make(map[string]*Session)
 	return nil
 }

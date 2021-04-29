@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
+	"syscall"
 
 	"github.com/habakke/hmq/broker"
 )
@@ -13,6 +14,7 @@ func init() {
 	ConfigureMaxProcs()
 }
 
+// Configures the GOMAXPROCS to number CPU cores
 func ConfigureMaxProcs() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 }
@@ -36,7 +38,7 @@ func main() {
 func waitForSignal() os.Signal {
 	signalChan := make(chan os.Signal, 1)
 	defer close(signalChan)
-	signal.Notify(signalChan, os.Kill, os.Interrupt)
+	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	s := <-signalChan
 	signal.Stop(signalChan)
 	return s

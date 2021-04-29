@@ -66,26 +66,26 @@ func NewManager(providerName string) (*Manager, error) {
 	return &Manager{p: p}, nil
 }
 
-func (this *Manager) Subscribe(topic []byte, qos byte, subscriber interface{}) (byte, error) {
-	return this.p.Subscribe(topic, qos, subscriber)
+func (m *Manager) Subscribe(topic []byte, qos byte, subscriber interface{}) (byte, error) {
+	return m.p.Subscribe(topic, qos, subscriber)
 }
 
-func (this *Manager) Unsubscribe(topic []byte, subscriber interface{}) error {
-	return this.p.Unsubscribe(topic, subscriber)
+func (m *Manager) Unsubscribe(topic []byte, subscriber interface{}) error {
+	return m.p.Unsubscribe(topic, subscriber)
 }
 
-func (this *Manager) Subscribers(topic []byte, qos byte, subs *[]interface{}, qoss *[]byte) error {
-	return this.p.Subscribers(topic, qos, subs, qoss)
+func (m *Manager) Subscribers(topic []byte, qos byte, subs *[]interface{}, qoss *[]byte) error {
+	return m.p.Subscribers(topic, qos, subs, qoss)
 }
 
-func (this *Manager) Retain(msg *packets.PublishPacket) error {
-	return this.p.Retain(msg)
+func (m *Manager) Retain(msg *packets.PublishPacket) error {
+	return m.p.Retain(msg)
 }
 
-func (this *Manager) Retained(topic []byte, msgs *[]*packets.PublishPacket) error {
-	return this.p.Retained(topic, msgs)
+func (m *Manager) Retained(topic []byte, msgs *[]*packets.PublishPacket) error {
+	return m.p.Retained(topic, msgs)
 }
 
-func (this *Manager) Close() error {
-	return this.p.Close()
+func (m *Manager) Close() error {
+	return m.p.Close()
 }

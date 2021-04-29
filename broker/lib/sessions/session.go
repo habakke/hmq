@@ -35,81 +35,81 @@ type Session struct {
 	id string
 }
 
-func (this *Session) Init(msg *packets.ConnectPacket) error {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (s *Session) Init(msg *packets.ConnectPacket) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
-	if this.initted {
+	if s.initted {
 		return fmt.Errorf("Session already initialized")
 	}
 
-	this.cmsg = msg
+	s.cmsg = msg
 
-	if this.cmsg.WillFlag {
-		this.Will = packets.NewControlPacket(packets.Publish).(*packets.PublishPacket)
-		this.Will.Qos = this.cmsg.Qos
-		this.Will.TopicName = this.cmsg.WillTopic
-		this.Will.Payload = this.cmsg.WillMessage
-		this.Will.Retain = this.cmsg.WillRetain
+	if s.cmsg.WillFlag {
+		s.Will = packets.NewControlPacket(packets.Publish).(*packets.PublishPacket)
+		s.Will.Qos = s.cmsg.Qos
+		s.Will.TopicName = s.cmsg.WillTopic
+		s.Will.Payload = s.cmsg.WillMessage
+		s.Will.Retain = s.cmsg.WillRetain
 	}
 
-	this.topics = make(map[string]byte, 1)
+	s.topics = make(map[string]byte, 1)
 
-	this.id = string(msg.ClientIdentifier)
+	s.id = string(msg.ClientIdentifier)
 
-	this.initted = true
-
-	return nil
-}
-
-func (this *Session) Update(msg *packets.ConnectPacket) error {
-	this.mu.Lock()
-	defer this.mu.Unlock()
-
-	this.cmsg = msg
-	return nil
-}
-
-func (this *Session) RetainMessage(msg *packets.PublishPacket) error {
-	this.mu.Lock()
-	defer this.mu.Unlock()
-
-	this.Retained = msg
+	s.initted = true
 
 	return nil
 }
 
-func (this *Session) AddTopic(topic string, qos byte) error {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (s *Session) Update(msg *packets.ConnectPacket) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
-	if !this.initted {
+	s.cmsg = msg
+	return nil
+}
+
+func (s *Session) RetainMessage(msg *packets.PublishPacket) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	s.Retained = msg
+
+	return nil
+}
+
+func (s *Session) AddTopic(topic string, qos byte) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if !s.initted {
 		return fmt.Errorf("Session not yet initialized")
 	}
 
-	this.topics[topic] = qos
+	s.topics[topic] = qos
 
 	return nil
 }
 
-func (this *Session) RemoveTopic(topic string) error {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (s *Session) RemoveTopic(topic string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
-	if !this.initted {
+	if !s.initted {
 		return fmt.Errorf("Session not yet initialized")
 	}
 
-	delete(this.topics, topic)
+	delete(s.topics, topic)
 
 	return nil
 }
 
-func (this *Session) Topics() ([]string, []byte, error) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (s *Session) Topics() ([]string, []byte, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
-	if !this.initted {
+	if !s.initted {
 		return nil, nil, fmt.Errorf("Session not yet initialized")
 	}
 
@@ -118,7 +118,7 @@ func (this *Session) Topics() ([]string, []byte, error) {
 		qoss   []byte
 	)
 
-	for k, v := range this.topics {
+	for k, v := range s.topics {
 		topics = append(topics, k)
 		qoss = append(qoss, v)
 	}
@@ -126,24 +126,24 @@ func (this *Session) Topics() ([]string, []byte, error) {
 	return topics, qoss, nil
 }
 
-func (this *Session) ID() string {
-	return this.cmsg.ClientIdentifier
+func (s *Session) ID() string {
+	return s.cmsg.ClientIdentifier
 }
 
-func (this *Session) WillFlag() bool {
-	this.mu.Lock()
-	defer this.mu.Unlock()
-	return this.cmsg.WillFlag
+func (s *Session) WillFlag() bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.cmsg.WillFlag
 }
 
-func (this *Session) SetWillFlag(v bool) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
-	this.cmsg.WillFlag = v
+func (s *Session) SetWillFlag(v bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.cmsg.WillFlag = v
 }
 
-func (this *Session) CleanSession() bool {
-	this.mu.Lock()
-	defer this.mu.Unlock()
-	return this.cmsg.CleanSession
+func (s *Session) CleanSession() bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.cmsg.CleanSession
 }

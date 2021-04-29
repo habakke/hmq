@@ -10,7 +10,7 @@ import (
 
 var (
 	ErrSessionsProviderNotFound = errors.New("Session: Session provider not found")
-	ErrKeyNotAvailable          = errors.New("Session: not item found for key.")
+	ErrKeyNotAvailable          = errors.New("Session: not item found for key")
 
 	providers = make(map[string]SessionsProvider)
 )
@@ -56,34 +56,34 @@ func NewManager(providerName string) (*Manager, error) {
 	return &Manager{p: p}, nil
 }
 
-func (this *Manager) New(id string) (*Session, error) {
+func (m *Manager) New(id string) (*Session, error) {
 	if id == "" {
-		id = this.sessionId()
+		id = m.sessionId()
 	}
-	return this.p.New(id)
+	return m.p.New(id)
 }
 
-func (this *Manager) Get(id string) (*Session, error) {
-	return this.p.Get(id)
+func (m *Manager) Get(id string) (*Session, error) {
+	return m.p.Get(id)
 }
 
-func (this *Manager) Del(id string) {
-	this.p.Del(id)
+func (m *Manager) Del(id string) {
+	m.p.Del(id)
 }
 
-func (this *Manager) Save(id string) error {
-	return this.p.Save(id)
+func (m *Manager) Save(id string) error {
+	return m.p.Save(id)
 }
 
-func (this *Manager) Count() int {
-	return this.p.Count()
+func (m *Manager) Count() int {
+	return m.p.Count()
 }
 
-func (this *Manager) Close() error {
-	return this.p.Close()
+func (m *Manager) Close() error {
+	return m.p.Close()
 }
 
-func (manager *Manager) sessionId() string {
+func (m *Manager) sessionId() string {
 	b := make([]byte, 15)
 	if _, err := io.ReadFull(rand.Reader, b); err != nil {
 		return ""

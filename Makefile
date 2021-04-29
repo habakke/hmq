@@ -1,35 +1,45 @@
-REPO=habakke
-CMD=hmq
-BINARY=hmq
-IMAGE=hmq
-ROOT_DIR := $(if $(ROOT_DIR),$(ROOT_DIR),$(shell git rev-parse --show-toplevel))
-BUILD_DIR = $(ROOT_DIR)/build
+BINARY          := hmq
+ROOT_DIR        := $(if $(ROOT_DIR),$(ROOT_DIR),$(shell git rev-parse --show-toplevel))
+BUILD_DIR       := $(ROOT_DIR)/build
+BUILD_DIR       := $(ROOT_DIR)/dist
+VERSION         := $(shell cat VERSION)
+GITSHA          := $(shell git rev-parse --short HEAD)
+
+.PHONY: build clean start lint staticcheck test fmt release-test release
 
 prepare:
 	mkdir -p $(BUILD_DIR)
 
-lint: export DOCKER_BUILDKIT=1
 lint:
-	@docker build . --target lint
+	go get -u golang.org/x/lint/golint
+	$(shell go list -f {{.Target}} golang.org/x/lint/golint) ./...
 
-test: export DOCKER_BUILDKIT=1
+check:
+	go get -u honnef.co/go/tools/cmd/staticcheck
+	$(shell go list -f {{.Target}} honnef.co/go/tools/cmd/staticcheck) ./...
+
 test: prepare
-	@docker build . --target unit-test
+	go test -v -coverprofile=$(BUILD_DIR)/cover.out ./...
 
-build: export DOCKER_BUILDKIT=1
 build: prepare
-	@docker build . --target bin --output $(BUILD_DIR)
+	goreleaser build --snapshot --rm-dist
 
-test-local: export CGO_ENABLED=0
-test-local: prepare
-	 go test -v -coverprofile=$(BUILD_DIR)/cover.out ./...
+start:
+	go run $(ROOT_DIR)/cmd/$(BINARY)/main.go
 
-build-local: export CGO_ENABLED=0
-build-local: prepare
-	go build -o $(BUILD_DIR)/$(BINARY) -a -ldflags '-extldflags "-static"' .
-
-start-local: build-local
-	go run $(ROOT_DIR)/main.go
+profile:
+	go tool pprof -http=:7777 cpuprofile
 
 clean:
 	rm -rf $(BUILD_DIR)
+
+fmt:
+	go fmt ./...
+
+release-test: export GITHUB_SHA=$(GITSHA)
+release-test:
+	goreleaser release --skip-publish --snapshot --rm-dist
+
+release: export GITHUB_SHA=$(GITSHA)
+release: release-test
+	git tag -a $(VERSION) -m "Release" && git push origin $(VERSION)

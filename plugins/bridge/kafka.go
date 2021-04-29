@@ -128,17 +128,11 @@ func (k *kafka) publish(topics map[string]bool, key string, msg *Elements) error
 
 func match(subTopic []string, topic []string) bool {
 	if len(subTopic) == 0 {
-		if len(topic) == 0 {
-			return true
-		}
-		return false
+		return len(topic) == 0
 	}
 
 	if len(topic) == 0 {
-		if subTopic[0] == "#" {
-			return true
-		}
-		return false
+		return subTopic[0] == "#"
 	}
 
 	if subTopic[0] == "#" {

@@ -196,7 +196,7 @@ func (config *Config) check() error {
 	if config.TlsPort != "" {
 		if config.TlsInfo.CertFile == "" || config.TlsInfo.KeyFile == "" {
 			log.Error("tls config error, no cert or key file.")
-			return errors.New("tls config error, no cert or key file.")
+			return errors.New("tls config error, no cert or key file")
 		}
 		if config.TlsHost == "" {
 			config.TlsHost = "0.0.0.0"
