@@ -1,6 +1,5 @@
 BINARY          := hmq
 ROOT_DIR        := $(if $(ROOT_DIR),$(ROOT_DIR),$(shell git rev-parse --show-toplevel))
-BUILD_DIR       := $(ROOT_DIR)/build
 BUILD_DIR       := $(ROOT_DIR)/dist
 VERSION         := $(shell cat VERSION)
 GITSHA          := $(shell git rev-parse --short HEAD)
@@ -17,6 +16,10 @@ lint:
 check:
 	go get -u honnef.co/go/tools/cmd/staticcheck
 	$(shell go list -f {{.Target}} honnef.co/go/tools/cmd/staticcheck) ./...
+
+sec:
+	go get -u github.com/securego/gosec/v2/cmd/gosec
+	$(shell go list -f {{.Target}} github.com/securego/gosec/v2/cmd/gosec) -fmt=golint ./...
 
 test: prepare
 	go test -short -coverprofile=$(BUILD_DIR)/cover.out ./...
