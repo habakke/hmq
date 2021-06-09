@@ -1,5 +1,11 @@
 package acl
 
+import "github.com/habakke/hmq/logger"
+
+var (
+	log = logger.Get().Named("authfile")
+)
+
 type aclAuth struct {
 	config *ACLConfig
 }

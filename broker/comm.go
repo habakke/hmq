@@ -188,7 +188,6 @@ func (c *client) ensureRetryTimer(interval ...int64) {
 	c.retryTimerLock.Lock()
 	c.retryTimer = time.AfterFunc(time.Duration(timerInterval)*time.Second, c.retryDelivery)
 	c.retryTimerLock.Unlock()
-	return
 }
 
 func (c *client) resetRetryTimer() {
@@ -224,12 +223,12 @@ func (c *client) retryDelivery() {
 		age := now - infEle.timestamp
 		if age >= retryInterval {
 			if infEle.status == Publish {
-				c.WriterPacket(infEle.packet)
+				_ = c.WriterPacket(infEle.packet)
 				infEle.timestamp = now
 			} else if infEle.status == Pubrel {
 				pubrel := packets.NewControlPacket(packets.Pubrel).(*packets.PubrelPacket)
 				pubrel.MessageID = infEle.packet.MessageID
-				c.WriterPacket(pubrel)
+				_ = c.WriterPacket(pubrel)
 				infEle.timestamp = now
 			}
 		} else {

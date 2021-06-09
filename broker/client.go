@@ -202,14 +202,12 @@ func extractPacketFields(msgPacket packets.ControlPacket) []string {
 	case *packets.PublishPacket:
 		packet := msgPacket.(*packets.PublishPacket)
 		fields = append(fields, packet.TopicName)
-		break
 
 	case *packets.SubscribePacket:
 	case *packets.SubackPacket:
 	case *packets.UnsubscribePacket:
 		packet := msgPacket.(*packets.UnsubscribePacket)
 		fields = append(fields, packet.Topics...)
-		break
 	}
 
 	return fields
@@ -267,7 +265,7 @@ func ProcessMessage(msg *Message) {
 		// If a Server or Client receives a Control Packet
 		// containing ill-formed UTF-8 it MUST close the Network Connection
 
-		c.conn.Close()
+		_ = c.conn.Close()
 
 		// Update client status
 		//c.status = Disconnected
@@ -317,7 +315,7 @@ func ProcessMessage(msg *Message) {
 		}
 	case *packets.PubrelPacket:
 		packet := ca.(*packets.PubrelPacket)
-		c.pubRel(packet.MessageID)
+		_ = c.pubRel(packet.MessageID)
 		pubcomp := packets.NewControlPacket(packets.Pubcomp).(*packets.PubcompPacket)
 		pubcomp.MessageID = packet.MessageID
 		if err := c.WriterPacket(pubcomp); err != nil {
@@ -557,7 +555,7 @@ func (c *client) processClientSubscribe(packet *packets.SubscribePacket) {
 		}
 
 		if oldSub, exist := c.subMap[t]; exist {
-			c.topicsMgr.Unsubscribe([]byte(oldSub.topic), oldSub)
+			_ = c.topicsMgr.Unsubscribe([]byte(oldSub.topic), oldSub)
 			delete(c.subMap, t)
 		}
 
@@ -578,9 +576,9 @@ func (c *client) processClientSubscribe(packet *packets.SubscribePacket) {
 
 		c.subMap[t] = sub
 
-		c.session.AddTopic(t, qoss[i])
+		_ = c.session.AddTopic(t, qoss[i])
 		retcodes = append(retcodes, rqos)
-		c.topicsMgr.Retained([]byte(topic), &c.rmsgs)
+		_ = c.topicsMgr.Retained([]byte(topic), &c.rmsgs)
 
 	}
 
@@ -691,7 +689,7 @@ func (c *client) processRouterUnSubscribe(packet *packets.UnsubscribePacket) {
 				continue
 			}
 
-			c.topicsMgr.Unsubscribe([]byte(sub.topic), sub)
+			_ = c.topicsMgr.Unsubscribe([]byte(sub.topic), sub)
 			delete(c.subMap, topic)
 		}
 
@@ -733,8 +731,8 @@ func (c *client) processClientUnSubscribe(packet *packets.UnsubscribePacket) {
 
 		sub, exist := c.subMap[topic]
 		if exist {
-			c.topicsMgr.Unsubscribe([]byte(sub.topic), sub)
-			c.session.RemoveTopic(topic)
+			_ = c.topicsMgr.Unsubscribe([]byte(sub.topic), sub)
+			_ = c.session.RemoveTopic(topic)
 			delete(c.subMap, topic)
 		}
 
@@ -785,7 +783,7 @@ func (c *client) Close() {
 	})
 
 	if c.conn != nil {
-		c.conn.Close()
+		_ = c.conn.Close()
 		c.conn = nil
 	}
 

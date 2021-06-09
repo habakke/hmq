@@ -2,6 +2,7 @@ package authhttp
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -87,8 +88,13 @@ func (a *authHTTP) CheckConnect(clientID, username, password string) bool {
 		return false
 	}
 
-	defer resp.Body.Close()
-	io.Copy(ioutil.Discard, resp.Body)
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Error(fmt.Sprintf("Error closing file: %s\n", err.Error()))
+		}
+	}()
+
+	_, _ = io.Copy(ioutil.Discard, resp.Body)
 	if resp.StatusCode == http.StatusOK {
 		addCache(action, clientID, username, password, "")
 		return true
@@ -168,8 +174,13 @@ func (a *authHTTP) CheckACL(action, clientID, username, ip, topic string) bool {
 		return false
 	}
 
-	defer resp.Body.Close()
-	io.Copy(ioutil.Discard, resp.Body)
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Error(fmt.Sprintf("Error closing file: %s\n", err.Error()))
+		}
+	}()
+
+	_, _ = io.Copy(ioutil.Discard, resp.Body)
 
 	if resp.StatusCode == http.StatusOK {
 		addCache(action, "", username, "", topic)

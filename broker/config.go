@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/habakke/hmq/logger"
 	"github.com/habakke/hmq/plugins/auth"
@@ -142,7 +143,7 @@ func ConfigureConfig(args []string) (*Config, error) {
 
 func LoadConfig(filename string) (*Config, error) {
 
-	content, err := ioutil.ReadFile(filename)
+	content, err := ioutil.ReadFile(filepath.Clean(filename))
 	if err != nil {
 		// log.Error("Read config file error: ", zap.Error(err))
 		return nil, err

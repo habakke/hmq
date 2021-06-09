@@ -29,6 +29,5 @@ func InitHTTP(b *Broker) {
 		c.JSON(200, &resp)
 	})
 
-_:
-	router.Run(":" + b.config.HTTPPort)
+	_ = router.Run(":" + b.config.HTTPPort)
 }

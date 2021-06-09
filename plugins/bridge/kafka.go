@@ -109,7 +109,7 @@ func (k *kafka) publish(topics map[string]bool, key string, msg *Elements) error
 		return err
 	}
 
-	for topic, _ := range topics {
+	for topic := range topics {
 		select {
 		case k.kafkaClient.Input() <- &sarama.ProducerMessage{
 			Topic: topic,

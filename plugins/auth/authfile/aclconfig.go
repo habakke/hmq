@@ -3,6 +3,7 @@ package acl
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -46,7 +47,11 @@ func AclConfigLoad(file string) (*ACLConfig, error) {
 
 func (c *ACLConfig) Prase() error {
 	f, err := os.Open(c.File)
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			log.Error(fmt.Sprintf("Error closing file: %s\n", err.Error()))
+		}
+	}()
 	if err != nil {
 		return err
 	}

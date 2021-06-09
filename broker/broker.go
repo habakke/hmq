@@ -396,7 +396,7 @@ func (b *Broker) ConnectToDiscovery() {
 			log.Error("Error trying to connect to route: ", zap.Error(err))
 			log.Debug("Connect to route timeout ,retry...")
 
-			if 0 == tempDelay {
+			if tempDelay == 0 {
 				tempDelay = 1 * time.Second
 			} else {
 				tempDelay *= 2
@@ -468,7 +468,7 @@ func (b *Broker) connectRouter(id, addr string) {
 
 			log.Debug("Connect to route timeout ,retry...")
 
-			if 0 == timeDelay {
+			if timeDelay == 0 {
 				timeDelay = 1 * time.Second
 			} else {
 				timeDelay *= 2
@@ -578,7 +578,7 @@ func (b *Broker) BroadcastInfoMessage(remoteID string, msg *packets.PublishPacke
 			if r.route.remoteID == remoteID {
 				return true
 			}
-			r.WriterPacket(msg)
+			_ = r.WriterPacket(msg)
 		}
 		return true
 
@@ -591,7 +591,7 @@ func (b *Broker) BroadcastSubOrUnsubMessage(packet packets.ControlPacket) {
 	b.routes.Range(func(key, value interface{}) bool {
 		r, ok := value.(*client)
 		if ok {
-			r.WriterPacket(packet)
+			_ = r.WriterPacket(packet)
 		}
 		return true
 	})
@@ -637,7 +637,7 @@ func (b *Broker) PublishMessage(packet *packets.PublishPacket) {
 func (b *Broker) BroadcastUnSubscribe(subs map[string]*subscription) {
 
 	unsub := packets.NewControlPacket(packets.Unsubscribe).(*packets.UnsubscribePacket)
-	for topic, _ := range subs {
+	for topic := range subs {
 		unsub.Topics = append(unsub.Topics, topic)
 	}
 
