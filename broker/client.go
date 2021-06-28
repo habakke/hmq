@@ -202,18 +202,15 @@ func extractPacketFields(msgPacket packets.ControlPacket) []string {
 	var fields []string
 
 	// Get packet type
-	switch msgPacket.(type) {
+	switch msgPacket := msgPacket.(type) {
 	case *packets.ConnackPacket:
 	case *packets.ConnectPacket:
 	case *packets.PublishPacket:
-		packet := msgPacket.(*packets.PublishPacket)
-		fields = append(fields, packet.TopicName)
-
+		fields = append(fields, msgPacket.TopicName)
 	case *packets.SubscribePacket:
 	case *packets.SubackPacket:
 	case *packets.UnsubscribePacket:
-		packet := msgPacket.(*packets.UnsubscribePacket)
-		fields = append(fields, packet.Topics...)
+		fields = append(fields, msgPacket.Topics...)
 	}
 
 	return fields
@@ -281,65 +278,57 @@ func ProcessMessage(msg *Message) {
 		return
 	}
 
-	switch ca.(type) {
+	switch ca := ca.(type) {
 	case *packets.ConnackPacket:
 	case *packets.ConnectPacket:
 	case *packets.PublishPacket:
-		packet := ca.(*packets.PublishPacket)
-
-		c.ProcessPublish(packet)
+		c.ProcessPublish(ca)
 	case *packets.PubackPacket:
-		packet := ca.(*packets.PubackPacket)
 		c.inflightMu.Lock()
-		if _, found := c.inflight[packet.MessageID]; found {
-			delete(c.inflight, packet.MessageID)
+		if _, found := c.inflight[ca.MessageID]; found {
+			delete(c.inflight, ca.MessageID)
 		} else {
-			log.Error("Duplicated PUBACK PacketId", zap.Uint16("MessageID", packet.MessageID))
+			log.Error("Duplicated PUBACK PacketId", zap.Uint16("MessageID", ca.MessageID))
 		}
 		c.inflightMu.Unlock()
 	case *packets.PubrecPacket:
-		packet := ca.(*packets.PubrecPacket)
 		c.inflightMu.RLock()
-		ielem, found := c.inflight[packet.MessageID]
+		ielem, found := c.inflight[ca.MessageID]
 		c.inflightMu.RUnlock()
 		if found {
 			if ielem.status == Publish {
 				ielem.status = Pubrel
 				ielem.timestamp = time.Now().Unix()
 			} else if ielem.status == Pubrel {
-				log.Error("Duplicated PUBREC PacketId", zap.Uint16("MessageID", packet.MessageID))
+				log.Error("Duplicated PUBREC PacketId", zap.Uint16("MessageID", ca.MessageID))
 			}
 		} else {
-			log.Error("The PUBREC PacketId is not found.", zap.Uint16("MessageID", packet.MessageID))
+			log.Error("The PUBREC PacketId is not found.", zap.Uint16("MessageID", ca.MessageID))
 		}
 
 		pubrel := packets.NewControlPacket(packets.Pubrel).(*packets.PubrelPacket)
-		pubrel.MessageID = packet.MessageID
+		pubrel.MessageID = ca.MessageID
 		if err := c.WriterPacket(pubrel); err != nil {
 			log.Error("send pubrel error, ", zap.Error(err), zap.String("ClientID", c.info.clientID))
 			return
 		}
 	case *packets.PubrelPacket:
-		packet := ca.(*packets.PubrelPacket)
-		_ = c.pubRel(packet.MessageID)
+		_ = c.pubRel(ca.MessageID)
 		pubcomp := packets.NewControlPacket(packets.Pubcomp).(*packets.PubcompPacket)
-		pubcomp.MessageID = packet.MessageID
+		pubcomp.MessageID = ca.MessageID
 		if err := c.WriterPacket(pubcomp); err != nil {
 			log.Error("send pubcomp error, ", zap.Error(err), zap.String("ClientID", c.info.clientID))
 			return
 		}
 	case *packets.PubcompPacket:
-		packet := ca.(*packets.PubcompPacket)
 		c.inflightMu.Lock()
-		delete(c.inflight, packet.MessageID)
+		delete(c.inflight, ca.MessageID)
 		c.inflightMu.Unlock()
 	case *packets.SubscribePacket:
-		packet := ca.(*packets.SubscribePacket)
-		c.ProcessSubscribe(packet)
+		c.ProcessSubscribe(ca)
 	case *packets.SubackPacket:
 	case *packets.UnsubscribePacket:
-		packet := ca.(*packets.UnsubscribePacket)
-		c.ProcessUnSubscribe(packet)
+		c.ProcessUnSubscribe(ca)
 	case *packets.UnsubackPacket:
 	case *packets.PingreqPacket:
 		c.ProcessPing()
@@ -844,6 +833,7 @@ func (c *client) WriterPacket(packet packets.ControlPacket) error {
 	}
 	if c.conn == nil {
 		c.Close()
+		//lint:ignore ST1005 This is how this log message looks
 		return errors.New("connect lost ....")
 	}
 

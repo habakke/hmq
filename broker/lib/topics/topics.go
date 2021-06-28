@@ -20,6 +20,7 @@ const (
 	SYS = "$"
 
 	// Both wildcards
+	//lint:ignore U1000 This may be used later
 	_WC = "#+"
 )
 
@@ -27,7 +28,6 @@ var (
 	providers = make(map[string]TopicsProvider)
 )
 
-// TopicsProvider
 type TopicsProvider interface {
 	Subscribe(topic []byte, qos byte, subscriber interface{}) (byte, error)
 	Unsubscribe(topic []byte, subscriber interface{}) error

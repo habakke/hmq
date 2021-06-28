@@ -10,7 +10,8 @@ import (
 
 var (
 	// env can be setup at build time with Go Linker. Value could be prod or whatever else for dev env
-	instance   *zap.Logger
+	instance *zap.Logger
+	//lint:ignore U1000 This may be used later
 	logCfg     zap.Config
 	encoderCfg = zap.NewProductionEncoderConfig()
 )

@@ -9,6 +9,7 @@ import (
 
 const (
 	// Queue size for the ack queue
+	//lint:ignore U1000 This may be used later
 	defaultQueueSize = 16
 )
 

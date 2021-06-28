@@ -104,7 +104,11 @@ func fetchMetrics() (map[string]*dto.MetricFamily, error) {
 	if err != nil {
 		log.Fatal("failed to fetch metrics")
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Error("error closing request body")
+		}
+	}()
 
 	var parser expfmt.TextParser
 	return parser.TextToMetricFamilies(resp.Body)

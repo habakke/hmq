@@ -46,6 +46,7 @@ const (
 	QosFailure = 0x80
 )
 
+//lint:ignore U1000 This may be used later
 func equal(k1, k2 interface{}) bool {
 	if reflect.TypeOf(k1) != reflect.TypeOf(k2) {
 		return false
@@ -121,6 +122,7 @@ func GenUniqueId() string {
 	return id.String()
 }
 
+//lint:ignore U1000 This may be used later
 func wrapPublishPacket(packet *packets.PublishPacket) *packets.PublishPacket {
 	p := packet.Copy()
 	wrapPayload := map[string]interface{}{
@@ -132,6 +134,7 @@ func wrapPublishPacket(packet *packets.PublishPacket) *packets.PublishPacket {
 	return p
 }
 
+//lint:ignore U1000 This may be used later
 func unWrapPublishPacket(packet *packets.PublishPacket) *packets.PublishPacket {
 	p := packet.Copy()
 	if gjson.GetBytes(p.Payload, "payload").Exists() {

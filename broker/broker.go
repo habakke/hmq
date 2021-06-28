@@ -51,6 +51,7 @@ type Broker struct {
 	metrics     *metrics.Manager
 }
 
+//lint:ignore U1000 This may be used later
 func newMessagePool() []chan *Message {
 	pool := make([]chan *Message, 0)
 	for i := 0; i < MessagePoolNum; i++ {
